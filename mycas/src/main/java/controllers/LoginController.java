@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import cas.server.Constants;
 import database.DB;
+import domains.ServiceTicket;
 import domains.User;
 
 @WebServlet(value="/login.do")
@@ -21,18 +22,33 @@ public class LoginController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String CAS_ST=request.getParameter("CAS_ST");
-		String host=request.getParameter("host");
-		String app=request.getParameter("app");
 		String LOCAL_SERVICE=request.getParameter("LOCAL_SERVICE");
-		String sessionId=request.getParameter("sessionId");
-		HttpSession session=request.getSession();
-		session.setAttribute("LOCAL_SERVICE", LOCAL_SERVICE);
-		//response.getWriter().println("login.doGet...");
-
+		Cookie cookies[] = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				//验证是否已经登录过CAS
+				if (cookie.getName().equals(Constants.CAS_TGS)) {
+					System.out.println("曾经登录过");
+					// 为简化设计TGS=ST
+					String CAS_TGS = cookie.getValue();
+					String CAS_ST = CAS_TGS;
+					ServiceTicket st = DB.findServiceTicketbySt(CAS_ST);
+					//如果已经登录过,通过验证st,来验证登录是否还有效
+					//即实现了在CAS的main页面跳转到其他系统的功能
+					//只要CAS注销,所有的系统都不能再登录
+					if (st != null) {
+						System.out.println("登录仍有效");
+						response.sendRedirect(LOCAL_SERVICE + "?"
+								+ Constants.CAS_ST + "=" + CAS_ST + "&"
+								+ Constants.LOCAL_SERVICE + "=" + LOCAL_SERVICE);
+						return;
+					}
+					// 有cookie
+				}
+			}
+		}
+		request.setAttribute(Constants.LOCAL_SERVICE, LOCAL_SERVICE);
 		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-		//response.sendRedirect("reDirect");
-		//response.getWriter().println("getUser.doGet...");
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,7 +78,6 @@ public class LoginController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/main.do");
 	} else {
 		System.out.println("密码错误");
-		session.setAttribute("msg", "login failed");
 		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 	}
 	//request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
