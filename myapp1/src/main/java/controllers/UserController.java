@@ -8,22 +8,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(value="/getUser.do")
+@WebServlet(value="*.do")
 public class UserController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String CAS_ST=request.getParameter("CAS_ST");
-		String host=request.getParameter("host");
-		String app=request.getParameter("app");
-		String LOCAL_SERVICE=request.getParameter("LOCAL_SERVICE");
-		String sessionId=request.getParameter("sessionId");
-		
-		//response.sendRedirect("reDirect");
-		System.out.println("in my getUser");
-		response.getWriter().println("local_id");
+		String urlString = request.getRequestURI();
+		if(urlString.endsWith("view.do")){
+			request.getRequestDispatcher("WEB-INF/jsp/view.jsp").forward(request, response);
+		}
+		else if(urlString.endsWith("logout.do")) {
+			response.getWriter().write("logouted");
+		}
 	}
 
 }

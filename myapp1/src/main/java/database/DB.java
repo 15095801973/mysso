@@ -5,12 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import domains.Mapping;
-import domains.ServiceTicket;
-import domains.SessionStorage;
+//import domains.Mapping;
+//import domains.ServiceTicket;
+//import domains.SessionStorage;
 import domains.User;
 
 public class DB {
+	/***
 	private static Set<ServiceTicket> serviceTickets = new HashSet<>();
 	private static Set<User> users = new HashSet<>();
 	private static Set<SessionStorage> sessionStorages = new HashSet<>();
@@ -115,5 +116,5 @@ public class DB {
 	public static void deleteServiceTicket(String CAS_ST) {
 		serviceTickets.removeAll(findServiceTicket(CAS_ST));
 	}
-
+***/
 }
