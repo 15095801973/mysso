@@ -47,7 +47,6 @@ public class SingleSignOutFilter implements Filter {
 		if(logout!=null)
 		{
 			System.out.println("mylogout!!!!!!");
-			User.count--;
 			//String sessionId=httpRequest.getParameter("sessionId");
 			//SessionMap.invalidate(sessionId);
 			response.getWriter().println("mylogout succeed");
