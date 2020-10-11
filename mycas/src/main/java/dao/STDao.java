@@ -50,7 +50,7 @@ public class STDao {
 				.prepareStatement("INSERT INTO serviceticket (st, user, timestamp) VALUES (?, ?,?);");
 		ps.setString(1, serviceticket.getSt());
 		ps.setString(2, serviceticket.getUser().getId());
-		ps.setTimestamp(2, serviceticket.getCreated());
+		ps.setTimestamp(3, serviceticket.getCreated());
 
 		ps.execute();
 		return true;
@@ -61,7 +61,7 @@ public class STDao {
 	public ServiceTicket get(final String st) throws Exception {
 
 //		Connection conn=getConnection();
-		PreparedStatement ps = conn.prepareStatement("select * from serviceticket where id=?");
+		PreparedStatement ps = conn.prepareStatement("select * from serviceticket where st=?");
 		ps.setString(1, st);
 		ps.execute();
 		ResultSet rs = ps.getResultSet();
@@ -81,7 +81,7 @@ public class STDao {
 	public List<ServiceTicket> finAll(final String st) throws Exception {
 
 //		Connection conn=getConnection();
-		PreparedStatement ps = conn.prepareStatement("select * from serviceticket where id=?");
+		PreparedStatement ps = conn.prepareStatement("select * from serviceticket where st=?");
 		ps.setString(1, st);
 		ps.execute();
 		ResultSet rs = ps.getResultSet();

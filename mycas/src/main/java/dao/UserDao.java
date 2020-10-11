@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import com.mysql.cj.jdbc.Driver;
+
+import domains.Mapping;
 import domains.User;
 
 //Data Access Object

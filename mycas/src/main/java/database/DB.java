@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import dao.MapDao;
 import dao.STDao;
 import dao.UserDao;
 import domains.Mapping;
@@ -17,22 +18,21 @@ public class DB {
 //	private static Set<User> users = new HashSet<>();
 	private static Set<SessionStorage> sessionStorages = new HashSet<>();
 	private static Set<Mapping> mappings = new HashSet<>();
-	private static UserDao uDao;
-	static {
-		User u1 = addUser("01", "0");
-		User u2 = addUser("02", "0");
-		addMapping(1L, u1, "app1u1", "localhost", "/app1");
-		addMapping(2L, u1, "app2u1", "localhost", "/app2");
-		addMapping(1L, u2, "app1u2", "localhost", "/app1");
-		addMapping(2L, u2, "app2u2", "localhost", "/app2");
-
-	}
+//	static {
+//		User u1 = addUser("01", "0");
+//		User u2 = addUser("02", "0");
+//		addMapping(1L, u1, "app1u1", "localhost", "/app1");
+//		addMapping(2L, u1, "app2u1", "localhost", "/app2");
+//		addMapping(1L, u2, "app1u2", "localhost", "/app1");
+//		addMapping(2L, u2, "app2u2", "localhost", "/app2");
+//	}
 
 	public static User addUser(String id, String pwd) {
 		User u = new User();
 		u.setId(id);
 		u.setPwd(pwd);
 //		users.add(u);
+		UserDao uDao;
 		try {
 			uDao = new UserDao();
 			uDao.add(u);
@@ -60,6 +60,7 @@ public class DB {
 
 	public static User findUser(String id, String pwd) {
 		List<User> users = null;
+		UserDao uDao;
 		try {
 			uDao = new UserDao();
 			users = uDao.getAll();
@@ -102,23 +103,33 @@ public class DB {
 
 	}
 
-	public static void addMapping(Long id, User casUser, String localUser, String host, String app) {
+	public static void addMapping(Long id, User casUser, String localUser, String host, String app) throws Exception {
 		Mapping m = new Mapping();
 		m.setId(id);
 		m.setCasUser(casUser);
 		m.setLocalUser(localUser);
 		m.setHost(host);
 		m.setApp(app);
-		mappings.add(m);
+//		mappings.add(m);
+		System.out.println("add map...");
+		MapDao mapDao=new MapDao();
+		mapDao.add(m);
 	}
 
 	public static Mapping findMappingByHostAndAppAndCasUser(String host, String app, User user) {
-		for (Mapping m : mappings) {
-			if (m.getHost().equals(host) && m.getApp().equals(app) && m.getCasUser().equals(user)) {
-				return m;
-			}
+		Mapping map = new Mapping();
+		MapDao mapDao;
+		try {
+			mapDao = new MapDao();
+
+			System.out.println("get map...");
+			map = mapDao.findMappingByHostAndAppAndCasUser(host, app, user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+
+		return map;
 	}
 
 	public static List<SessionStorage> findSessionStorage(String CAS_ST) {

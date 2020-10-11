@@ -37,18 +37,25 @@ public class LoginController extends HttpServlet {
 					//即实现了在CAS的main页面跳转到其他系统的功能
 					//只要CAS注销,所有的系统都不能再登录
 					if (st != null) {
-						System.out.println("登录仍有效");
+						System.out.println("登录仍有效,st= "+st);
+						if(LOCAL_SERVICE!=null&& !LOCAL_SERVICE.equals("")) {
 						response.sendRedirect(LOCAL_SERVICE + "?"
 								+ Constants.CAS_ST + "=" + CAS_ST + "&"
 								+ Constants.LOCAL_SERVICE + "=" + LOCAL_SERVICE);
 						return;
+						}
+						else {
+							System.out.println("未指定服务,,,main,,"+request.getContextPath());
+							response.sendRedirect(request.getContextPath()+"/main.do");
+							return;
+						}
 					}
 					// 有cookie
 				}
 			}
 		}
 		request.setAttribute(Constants.LOCAL_SERVICE, LOCAL_SERVICE);
-		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");//.forward(request, response);
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
