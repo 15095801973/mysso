@@ -46,7 +46,7 @@ public class LoginController extends HttpServlet {
 						}
 						else {
 							System.out.println("未指定服务,,,main,,"+request.getContextPath());
-							response.sendRedirect(request.getContextPath()+"/main.do");
+							request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
 							return;
 						}
 					}
@@ -55,7 +55,8 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		request.setAttribute(Constants.LOCAL_SERVICE, LOCAL_SERVICE);
-		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");//.forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+
 	}
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

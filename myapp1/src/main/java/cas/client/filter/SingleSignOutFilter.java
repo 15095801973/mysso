@@ -1,4 +1,4 @@
-package filter;
+package cas.client.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import cas.client.Constants;
 import cas.client.SessionMap;
-import domains.User;
 
 /**
  * Servlet Filter implementation class SingleSignOutFilter
@@ -43,13 +42,14 @@ public class SingleSignOutFilter implements Filter {
 		//HttpServletResponse httpResponse=(HttpServletResponse)response;
 		//HttpSession session=httpRequest.getSession();
 		String logout=httpRequest.getParameter("logout");
-
+		String sessionId=httpRequest.getParameter("sessionId");
+		System.out.println("F1,sessionID:"+sessionId);
 		if(logout!=null)
 		{
-			System.out.println("mylogout!!!!!!");
+			System.out.println("logout...");
 			//String sessionId=httpRequest.getParameter("sessionId");
-			//SessionMap.invalidate(sessionId);
-			response.getWriter().println("mylogout succeed");
+			SessionMap.invalidate(sessionId);
+			response.getWriter().println("succeed");
 		}else{
 			chain.doFilter(request, response);
 		}

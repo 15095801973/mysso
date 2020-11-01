@@ -48,12 +48,11 @@ public class MapDao {
 	public Boolean add(final Mapping mapping) throws Exception {
 //		Connection conn=getConnection();
 		PreparedStatement ps = conn
-				.prepareStatement("INSERT INTO mapping (id, localUser, host, app, casUser) VALUES (?,?, ?, ?,?);");
-		ps.setLong(1, mapping.getId());
-		ps.setString(2, mapping.getLocalUser());
-		ps.setString(3, mapping.getHost());
-		ps.setString(4, mapping.getApp());
-		ps.setString(5, mapping.getCasUser().getId());
+				.prepareStatement("INSERT INTO mapping (localUser, host, app, casUser) VALUES (?, ?, ?,?);");
+		ps.setString(1, mapping.getLocalUser());
+		ps.setString(2, mapping.getHost());
+		ps.setString(3, mapping.getApp());
+		ps.setString(4, mapping.getCasUser().getId());
 
 		ps.execute();
 		return true;

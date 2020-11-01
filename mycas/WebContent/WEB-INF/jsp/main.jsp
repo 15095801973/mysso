@@ -30,6 +30,7 @@ USER: ${user }
 LOCAL_USER_ID ${LOCAL_USER_ID }
 <p><a href="http://localhost:8080/myapp1/view.do">子系统1</a></p>
 <p><a href="http://localhost:8080/myapp2/view.do">子系统2</a></p>
+<p><a href="/mycas/logout.do">注销</a></p>
 
 </body>
 </html>

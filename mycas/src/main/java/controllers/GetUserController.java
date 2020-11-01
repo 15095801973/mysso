@@ -30,12 +30,13 @@ public class GetUserController extends HttpServlet {
 //		System.out.println("in my getUser");
 //		response.getWriter().println("local_id");
 		DB.addSessionStorage(LOCAL_SERVICE, CAS_ST, sessionId);
+		System.out.println("CAS_ST="+CAS_ST);
 		ServiceTicket st = DB.findServiceTicketbySt(CAS_ST);
 		System.out.println("GetUserController.find_st: " + st);
 		System.out.println("host:" + host + "app:" + app);
 		Mapping mapping = DB.findMappingByHostAndAppAndCasUser(host, app, st.getUser());
 		if (mapping == null) {
-			response.getWriter().println("");
+			response.getWriter().println("none");
 		} else
 			response.getWriter().println(mapping.getLocalUser());
 	}

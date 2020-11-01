@@ -12,12 +12,13 @@ import domains.Mapping;
 import domains.ServiceTicket;
 import domains.SessionStorage;
 import domains.User;
+import cas.server.Constants;
 
 public class DB {
-//	private static Set<ServiceTicket> serviceTickets = new HashSet<>();
+	private static Set<ServiceTicket> serviceTickets = new HashSet<>();
 //	private static Set<User> users = new HashSet<>();
 	private static Set<SessionStorage> sessionStorages = new HashSet<>();
-	private static Set<Mapping> mappings = new HashSet<>();
+//	private static Set<Mapping> mappings = new HashSet<>();
 //	static {
 //		User u1 = addUser("01", "0");
 //		User u2 = addUser("02", "0");
@@ -36,6 +37,9 @@ public class DB {
 		try {
 			uDao = new UserDao();
 			uDao.add(u);
+			System.out.println("add..");
+			addMapping(u, "app1/" + id, Constants.localhost, Constants.myapp1);
+			addMapping(u, "app2/" + id, Constants.localhost, Constants.myapp2);
 			uDao.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -46,16 +50,22 @@ public class DB {
 
 	public static ServiceTicket findServiceTicketbySt(String st) {
 
-		STDao stDao;
-		ServiceTicket sTicket = new ServiceTicket();
-		try {
-			stDao = new STDao();
-			sTicket = stDao.get(st);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		STDao stDao;
+//		ServiceTicket sTicket = new ServiceTicket();
+//		try {
+//			stDao = new STDao();
+//			sTicket = stDao.get(st);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return sTicket;
+		for (ServiceTicket s : serviceTickets) {
+			if (s.getSt().equals(st)) {
+				return s;
+			}
 		}
-		return sTicket;
+		return null;
 	}
 
 	public static User findUser(String id, String pwd) {
@@ -79,19 +89,21 @@ public class DB {
 	}
 
 	public static void addServiceTicket(User user, String st) {
-		STDao stDao;
-		try {
-			ServiceTicket serviceTicket = new ServiceTicket();
-			stDao = new STDao();
-			serviceTicket.setUser(user);
-			serviceTicket.setSt(st);
-			stDao.add(serviceTicket);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-//		serviceTickets.add(serviceTicket);
+//		STDao stDao;
+//		try {
+//			ServiceTicket serviceTicket = new ServiceTicket();
+//			stDao = new STDao();
+//			serviceTicket.setUser(user);
+//			serviceTicket.setSt(st);
+//			stDao.add(serviceTicket);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		ServiceTicket serviceTicket = new ServiceTicket();
+		serviceTicket.setUser(user);
+		serviceTicket.setSt(st);
+		serviceTickets.add(serviceTicket);
 	}
 
 	public static void addSessionStorage(String LOCAL_SERVICE, String CAS_ST, String sessionId) {
@@ -103,16 +115,15 @@ public class DB {
 
 	}
 
-	public static void addMapping(Long id, User casUser, String localUser, String host, String app) throws Exception {
+	public static void addMapping(User casUser, String localUser, String host, String app) throws Exception {
 		Mapping m = new Mapping();
-		m.setId(id);
 		m.setCasUser(casUser);
 		m.setLocalUser(localUser);
 		m.setHost(host);
 		m.setApp(app);
 //		mappings.add(m);
 		System.out.println("add map...");
-		MapDao mapDao=new MapDao();
+		MapDao mapDao = new MapDao();
 		mapDao.add(m);
 	}
 
@@ -147,15 +158,29 @@ public class DB {
 
 	}
 
-	public static List<ServiceTicket> findServiceTicket(String CAS_ST) throws Exception {
+	public static List<ServiceTicket> findServiceTicket(String CAS_ST) {
 
-		STDao stDao = new STDao();
-		return stDao.finAll(CAS_ST);
+//		STDao stDao = new STDao();
+//		return stDao.finAll(CAS_ST);
+		List<ServiceTicket> list = new ArrayList<>();
+		for (ServiceTicket s : serviceTickets) {
+			if (s.getSt().equals(CAS_ST)) {
+				list.add(s);
+			}
+		}
+		return list;
 	}
 
-	public static void deleteServiceTicket(String CAS_ST) throws Exception {
-		STDao stDao = new STDao();
-		stDao.delete(CAS_ST);
+	public static void deleteServiceTicket(String CAS_ST) {
+//		STDao stDao;
+//		try {
+//			stDao = new STDao();
+//			stDao.delete(CAS_ST);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+		serviceTickets.removeAll(findServiceTicket(CAS_ST));
 	}
-
 }

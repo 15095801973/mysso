@@ -15,5 +15,6 @@
 <p>来自域：<input type="text" name="LOCAL_SERVICE" value="${LOCAL_SERVICE}" ></p>
 <p><input type="submit" value="登录"></p>
 </form>
+<a href="/mycas/register.do">注册</a>
 </body>
 </html>
